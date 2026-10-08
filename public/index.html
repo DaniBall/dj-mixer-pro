@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Mixer Pro - Deezer API</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { margin-bottom: 5px; color: #00e676; text-shadow: 0 0 10px rgba(0,230,118,0.3); }
+        .subtitle { color: #888; margin-bottom: 25px; font-size: 14px; }
+        
+        .mixer-container {
+            display: flex;
+            background: #1a1a1a;
+            border: 4px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            gap: 20px;
+            max-width: 950px;
+            width: 100%;
+        }
+        
+        .deck {
+            flex: 2;
+            background: #222;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-top: 4px solid #00e676;
+        }
+        #deck-b { border-top-color: #29b6f6; }
+        
+        .track-info {
+            height: 45px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #ccc;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+        
+        .vinyl-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 15px;
+        }
+        
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #000 30%, #111 40%, #000 50%, #222 60%, #000 70%);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.1s linear;
+        }
+        
+        .vinyl.spinning {
+            animation: spin 2s linear infinite;
+        }
+        
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .artwork {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background-color: #333;
+            background-size: cover;
+            border: 3px solid #000;
+        }
+        
+        .controls-row {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        
+        button {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        button:hover { background: #444; }
+        button.active-play { background: #00e676; color: #000; }
+        button.active-mute { background: #d32f2f; color: #fff; }
+        
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 8px 0;
+        }
+        .slider-group label {
+            font-size: 11px;
+            color: #aaa;
+            margin-bottom: 3px;
+            display: flex;
+            justify-content: space-between;
+        }
+        input[type=range] {
+            width: 100%;
+            accent-color: #00e676;
+        }
+        #deck-b input[type=range] { accent-color: #29b6f6; }
+        
+        .central-mixer {
+            flex: 1;
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #333;
+            min-width: 150px;
+        }
+        
+        .eq-knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .eq-knob-container label { font-size: 11px; color: #888; margin-bottom: 2px; }
+        
+        .crossfader-container {
+            width: 100%;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+        .crossfader-container label { font-size: 11px; color: #aaa; display: block; margin-bottom: 5px; }
+        
+        .search-section {
+            margin-top: 25px;
+            width: 100%;
+            max-width: 950px;
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+            background: #252525;
+            color: #fff;
+            font-size: 14px;
+        }
+        .search-box button {
+            background: #00e676;
+            color: #000;
+            padding: 0 20px;
+        }
+        
+        .results-list {
+            max-height: 250px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .result-item {
+            display: flex;
+            align-items: center;
+            background: #222;
+            padding: 8px;
+            border-radius: 4px;
+            gap: 12px;
+        }
+        .result-item img { width: 40px; height: 40px; border-radius: 4px; }
+        .result-details { flex: 1; min-width: 0; }
+        .result-title { font-weight: bold; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .result-artist { color: #888; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .load-buttons { display: flex; gap: 5px; }
+        .btn-load-a { background: #00e676; color: #000; font-size: 12px; padding: 5px 10px; }
+        .btn-load-b { background: #29b6f6; color: #000; font-size: 12px; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>DJ MIXER STUDIO PRO</h1>
+    <div class="subtitle">Conectado a la API Pública de Deezer • Motor Web Audio HTML5</div>
+
+    <div class="mixer-container">
+        <!-- DECK A -->
+        <div class="deck" id="deck-a">
+            <div class="track-info" id="info-a">Plato A Vacío<br><span style="font-size:11px;color:#666;">Busca un tema abajo</span></div>
+            <div class="vinyl-container">
+                <div class="vinyl" id="vinyl-a">
+                    <div class="artwork" id="art-a"></div>
+                </div>
+            </div>
+            
+            <div class="controls-row">
+                <button id="btn-play-a">PLAY</button>
+                <button id="btn-mute-a">MUTE</button>
+            </div>
+
+            <div class="slider-group">
+                <label>VOLUMEN <span id="val-vol-a">80%</span></label>
+                <input type="range" id="vol-a" min="0" max="1" step="0.01" value="0.8">
+            </div>
+
+            <div class="slider-group">
+                <label>FILTRO FX (LPF) <span id="val-lpf-a">OFF</span></label>
+                <input type="range" id="lpf-a" min="200" max="20000" step="100" value="20000">
+            </div>
+        </div>
+
+        <!-- CENTRAL MIXER -->
+        <div class="central-mixer">
+            <div class="eq-knob-container">
+                <label>HI EQ</label>
+                <input type="range" id="eq-hi" min="-12" max="12" step="1" value="0">
+            </div>
+            <div class="eq-knob-container">
+                <label>MID EQ</label>
+                <input type="range" id="eq-mid" min="-12" max="12" step="1" value="0">
+            </div>
+            <div class="eq-knob-container">
+                <label>LOW EQ</label>
+                <input type="range" id="eq-low" min="-12" max="12" step="1" value="0">
+            </div>
+
+            <div class="crossfader-container">
+                <label>CROSSFADER</label>
+                <input type="range" id="crossfader" min="-1" max="1" step="0.01" value="0">
+            </div>
+        </div>
+
+        <!-- DECK B -->
+        <div class="deck" id="deck-b">
+            <div class="track-info" id="info-b">Plato B Vacío<br><span style="font-size:11px;color:#666;">Busca un tema abajo</span></div>
+            <div class="vinyl-container">
+                <div class="vinyl" id="vinyl-b">
+                    <div class="artwork" id="art-b"></div>
+                </div>
+            </div>
+            
+            <div class="controls-row">
+                <button id="btn-play-b">PLAY</button>
+                <button id="btn-mute-b">MUTE</button>
+            </div>
+
+            <div class="slider-group">
+                <label>VOLUMEN <span id="val-vol-b">80%</span></label>
+                <input type="range" id="vol-b" min="0" max="1" step="0.01" value="0.8">
+            </div>
+
+            <div class="slider-group">
+                <label>FILTRO FX (LPF) <span id="val-lpf-b">OFF</span></label>
+                <input type="range" id="lpf-b" min="200" max="20000" step="100" value="20000">
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH SECTION -->
+    <div class="search-section">
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Escribe un artista, canción o género electrónico...">
+            <button id="btn-search">BUSCAR</button>
+        </div>
+        <div class="results-list" id="results"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

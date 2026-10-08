@@ -1,0 +1,12 @@
+{
+  "name": "music-mixer-pro",
+  "version": "1.0.0",
+  "description": "DJ Mixer Pro App using Deezer API with Web Audio Engine",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
