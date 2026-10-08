@@ -159,8 +159,7 @@ async function searchMusic() {
         // Se codifica primero la consulta de Deezer y después su URL completa para el proxy.
         const targetUrl = new URL('https://api.deezer.com/search');
         targetUrl.searchParams.set('q', query);
-        //const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl.href)}`;
-        const proxyUrl = `https://herokuapp.com${encodeURIComponent(targetUrl.href)}`;
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl.href)}`;
         const response = await fetch(proxyUrl, { signal: controller.signal });
         if (!response.ok) throw new Error('La petición al proxy ha fallado.');
 
