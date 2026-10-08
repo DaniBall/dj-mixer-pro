@@ -76,3 +76,14 @@ Verás un mensaje en la consola indicando que el servidor está corriendo con é
 Este proyecto ha sido desarrollado de forma íntegra utilizando el **Modo IA de Google**. Desde la arquitectura del servidor proxy en Node.js para evadir restricciones de CORS, pasando por el diseño visual de la mesa de mezclas en CSS, hasta la implementación del motor de sonido en tiempo real con la Web Audio API de HTML5. Todo el código ha sido generado, optimizado y empaquetado de manera autónoma por la inteligencia artificial.
 
 ---
+
+# 🎛️ Music Mixer Pro - Edición Estática
+
+Aplicación de mezcla DJ creada para funcionar directamente desde el navegador de manera 100% estática, optimizada para **GitHub Pages**.
+
+---
+
+## 🚀 Cómo usar en tu ordenador
+Solo haz **doble clic en el archivo index.html** y se abrirá automáticamente en tu navegador listo para buscar música y mezclar sin instalar nada.
+
+---
