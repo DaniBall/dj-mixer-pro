@@ -68,3 +68,11 @@ Verás un mensaje en la consola indicando que el servidor está corriendo con é
 *   **Backend:** Node.js, Express (utilizado como túnel Proxy seguro para evadir restricciones de dominios cruzados CORS de la API externa).
 *   **Frontend:** HTML5, CSS3 moderno (con animaciones Keyframes para los vinilos).
 *   **Audio Core:** Web Audio API (Nodos `AudioContext`, `GainNode` y `BiquadFilterNode` para modelar y modular las frecuencias de audio en tiempo real).
+
+---
+
+## 🤖 Créditos de Desarrollo
+
+Este proyecto ha sido desarrollado de forma íntegra utilizando el **Modo IA de Google**. Desde la arquitectura del servidor proxy en Node.js para evadir restricciones de CORS, pasando por el diseño visual de la mesa de mezclas en CSS, hasta la implementación del motor de sonido en tiempo real con la Web Audio API de HTML5. Todo el código ha sido generado, optimizado y empaquetado de manera autónoma por la inteligencia artificial.
+
+---
